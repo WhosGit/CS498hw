@@ -149,7 +149,7 @@ def run_training(args):
     name = "Qwen/Qwen3-0.6B"
     tokenizer = AutoTokenizer.from_pretrained(name, trust_remote_code=True)
     tokenizer.pad_token = tokenizer.eos_token
-    Qwenmodel = AutoModelForCausalLM.from_pretrained(name, trust_remote_code=True)
+    Qwenmodel = AutoModelForCausalLM.from_pretrained(name, trust_remote_code=True, dtype=torch.float32)
 
     ###generate local dataset loader###
     len_max = 256

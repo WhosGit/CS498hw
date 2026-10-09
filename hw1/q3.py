@@ -11,7 +11,8 @@ def reduce_scatter(chunks, tmp, world, rank, left, right):
     # your code here: follow slides instruction: do counter-clockwise iteration
     #                                                                   #
     #                                                                   #
-    return
+    for i in range(world):
+        
         
 def all_gather(chunks, tmp, current, world, rank, left, right):
     #                                                                   #
