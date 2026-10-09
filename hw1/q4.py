@@ -35,7 +35,7 @@ def shard_weights(w1, w2, rank, world_size):
     end_idx = start_idx + features_per_rank + (1 if rank < remainder else 0)
 
     # Return the shards for this rank
-    return w1[:, start_idx:end_idx].clone(), w2[start_idx:end_idx, :].clone()
+    return w1[:, start_idx:end_idx].clone().contiguous(), w2[start_idx:end_idx, :].clone().contiguous()
 
 
 
@@ -62,7 +62,7 @@ def sum_across_ranks(tensor, rank, world_size):
 
     if rank == 0:
         # Initialize the sum 
-        total_sum = tensor.clone()
+        total_sum = tensor.clone().contiguous()
 
         # Receive contributions from other ranks
         recv_requests = []
@@ -95,7 +95,7 @@ def sum_across_ranks(tensor, rank, world_size):
     # your code here: send to rank 0 and receive the completed sum        #
     #                Wait before reading/reusing buffers or returning.   #
     #                                                                   #
-    dist.isend(tensor, dst=0).wait()
+    dist.isend(tensor.contiguous(), dst=0).wait()
 
     recv_tensor = torch.empty_like(tensor)
     req = dist.irecv(recv_tensor, src=0)
